@@ -1,0 +1,13 @@
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+	outputDir: '../src/main/resources/static',
+	deServer:	{
+		port:3031,
+		proxy:	{
+			'api':	{
+				target:	'http://localhost:3001'
+			}
+		}
+	},
+  	transpileDependencies: true
+})
