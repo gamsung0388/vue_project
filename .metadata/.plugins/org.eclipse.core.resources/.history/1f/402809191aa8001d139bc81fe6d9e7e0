@@ -1,0 +1,28 @@
+package com.example.demo.board;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class BoardService {
+	@Autowired
+	private BoardMapper boardMapper;
+	
+	//게시물 등록
+	public String boardInsert(BoardDTO boardDTO) {
+		
+		boardMapper.boardinsert(boardDTO);
+		
+		return "Y";
+	}
+	
+	//게시물 수정
+	public String boardUpdate(BoardDTO boardDTO) {
+		
+		boardMapper.boardupdate(boardDTO);
+		
+		return "Y";
+	}
+	
+	
+}

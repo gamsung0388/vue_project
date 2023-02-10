@@ -1,0 +1,25 @@
+package com.example.demo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.example.demo.board.BoardDTO;
+import com.example.demo.board.BoardService;
+
+@SpringBootTest
+public class BoardTest {
+
+	@Autowired
+	private BoardService boardService;
+	
+	public void boardinsert() {
+		
+		BoardDTO boardData = new BoardDTO();
+		
+		boardData.setBoardTitle(null);
+		boardData.setBoardTxt(null);
+		boardData.setBoardTag(null);
+		
+	}
+	
+}
