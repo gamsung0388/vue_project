@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.example.demo.comment.CommentMapper">
+	<inert id="commentInsert" parameterType="commentDTO">
+		<selectKey resultType="int" keyProperty="commentNum" order="BEFORE">
+			SELECT IFNULL(MAX(COMMENT_NUM+1),1) FROM COMMENT;
+		</selectKey>
+		INSERT COMMENT(
+			COMMENT_NUM
+		    ,BOARD_NUM
+		    ,COMMENT_TXT
+		    ,USER_ID
+		    ,DEL_YN
+		    ) 
+		    VALUES(
+		    	#{commentNum}
+				#{commentNum},
+		        #{commentNum},
+		        #{commentNum},
+		        #{commentNum},
+		        #{commentNum},
+		    );
+		
+	</inert>
+
+
+</mapper>

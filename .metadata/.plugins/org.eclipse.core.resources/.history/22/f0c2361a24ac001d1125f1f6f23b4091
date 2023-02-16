@@ -1,0 +1,11 @@
+package com.example.demo.comment;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class CommentController {
+	
+	private CommentService commentService;
+	
+	
+}

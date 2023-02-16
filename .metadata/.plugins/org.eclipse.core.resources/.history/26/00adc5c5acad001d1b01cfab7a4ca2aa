@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.exmaple.demo.file.FileMapper">
+	<insert id="insertFile" useGeneratedKeys="true" keyProperty="fileId">
+		INSERT INTO TB_FILE(
+			ORIG_NM
+			,LOGI_NM
+			,LOGI_PATH
+			,EXT
+			,SIZE
+			,REG_DT		
+		)VALUE(
+			#{origNm}
+			,#{pyscNm}
+			,#{pyscPath}
+			,#{fileExt}
+			,#{fileSize}
+			,NOW()
+		
+		)	
+	</insert>
+	<select id="getFileInfo" resultType="com.test.dev.board.dto.FileDTO">
+		SELECT 
+			FILE_ID
+			,ORIG_NM
+			,LOGI_NM
+			,LOGI_PATH
+			,EXT
+			,SIZE
+			,REG_DT
+		FROM
+			TB_FILE
+		WHERE
+			FILE_ID = #{fileId}
+			
+	</select>
+	
+	<!-- 파일 논리삭제 -->
+	<update id="deleteFile">
+		UPDATE 
+			TB_BOARD_FILE
+		SET
+			USE_YN = 'N'
+		WHERE 
+			FILE_ID = #{fileId}		
+	</update>
+</mapper>

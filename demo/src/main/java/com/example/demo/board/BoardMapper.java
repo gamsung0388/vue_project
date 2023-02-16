@@ -4,10 +4,17 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.demo.paging.SearchDTO;
+
 @Mapper
 public interface BoardMapper {
 	public void boardinsert(BoardDTO boardDTO);
 	public void boardupdate(BoardDTO boardDTO);
 	public void boarddelete(int boardNum);
-	public List<BoardDTO> boardselect();
+	public void readCnt(int boardNum);
+	
+	public int boardCnt();
+	
+	public BoardDTO boardOne(int boardNum);
+	public List<BoardDTO> boardselect(SearchDTO searchDTO);
 }

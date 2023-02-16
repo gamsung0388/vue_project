@@ -1,0 +1,8 @@
+package com.example.demo.file;
+
+import lombok.Data;
+
+@Data
+public class FileDTO {
+
+}

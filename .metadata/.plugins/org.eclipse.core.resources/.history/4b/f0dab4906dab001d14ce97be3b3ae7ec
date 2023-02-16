@@ -1,0 +1,27 @@
+package com.example.demo.paging;
+
+import lombok.Data;
+
+@Data
+public class Pagination {
+	private int page;				//현재 페이지
+	private int totalRecordCount;	//전체 데이터 수
+	private int totalPageCnt;		//전체 페이지 수
+	private int startPage;			//첫 페이지 수
+	private int endPage;			//끝 페이지 수
+	private int limitStart;			//limit 시작위치
+	private boolean existPrevPage;	//이전 페이지 존재여부
+	private boolean existNextPage;	//다음 페이지 존재여부
+	
+	public Pagination( int totalRecordCount, SearchDTO params) {
+		if(totalRecordCount > 0) {
+			this.totalRecordCount = totalRecordCount;
+			this.calulation(params);
+		}
+	}
+
+	public void calulation(SearchDTO params) {
+		
+	}
+
+}

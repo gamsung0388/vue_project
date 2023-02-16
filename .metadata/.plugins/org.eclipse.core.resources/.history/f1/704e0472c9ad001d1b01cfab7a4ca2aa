@@ -1,0 +1,16 @@
+package com.example.demo.file;
+
+import java.time.LocalDateTime;
+
+import lombok.Data;
+
+@Data
+public class FileDTO {
+	private int file_id;
+	private String orig_nm;
+	private String logi_nm;
+	private String logi_path;
+	private String ext;
+	private int size;
+	private LocalDateTime regDt;
+}

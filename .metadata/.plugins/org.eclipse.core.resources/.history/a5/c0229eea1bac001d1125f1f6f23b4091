@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.example.demo.comment.CommentMapper">
+	<inert id="commentInsert" parameterType="commentDTO">
+		<selectKey resultType="int" keyProperty="commentNum" order="BEFORN">
+		
+		</selectKey>
+	
+	</inert>
+
+
+</mapper>

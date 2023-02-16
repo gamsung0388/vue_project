@@ -1,0 +1,11 @@
+package com.example.demo.comment;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface CommentMapper {
+	public void commentInsert(CommentDTO commentDTO);
+	public void commentUpdate(CommentDTO commentDTO);
+	public void commentDelete(int commentNum);
+	public void commentSelect(int boardNum);
+}

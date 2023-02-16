@@ -1,8 +1,15 @@
 package com.example.demo.board;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
+
+import com.example.demo.comment.CommentMapper;
+import com.example.demo.paging.Pagination;
+import com.example.demo.paging.SearchDTO;
 
 import lombok.AllArgsConstructor;
 
@@ -11,6 +18,7 @@ import lombok.AllArgsConstructor;
 public class BoardService {
 	
 	private BoardMapper boardMapper;
+	private CommentMapper commentMapper;
 	
 	//게시물 등록
 	public String boardInsert(BoardDTO boardDTO) {
@@ -24,6 +32,10 @@ public class BoardService {
 	
 	//게시물 수정
 	public String boardUpdate(BoardDTO boardDTO) {
+
+		LocalDateTime now = LocalDateTime.now();
+		
+		boardDTO.setBoardUdt(now);
 		
 		boardMapper.boardupdate(boardDTO);
 		
@@ -31,19 +43,56 @@ public class BoardService {
 	}
 	
 	//게시물 삭제
-	public String boardDelete(int bnum) {
-		
-		boardMapper.boarddelete(bnum);
+	public String boardDelete(List<String> checkList) {
+				
+		for(int i=0;i<checkList.size();i++) {
+			
+			String sdata =checkList.get(i);
+			
+			sdata = sdata.replace("[","");
+			sdata = sdata.replace("]","");
+			
+			int checkdata = Integer.parseInt(sdata); 
+			
+			System.out.println(checkdata);
+			
+			boardMapper.boarddelete(checkdata);
+			commentMapper.boardCommentDel(checkdata);
+		}
 		
 		return "Y";
 	}	
 
 	//게시물 목록
-	public List<BoardDTO> boardSelect() {
+	public Map<String, Object> boardSelect(SearchDTO searchDTO) {
 		
-		List<BoardDTO> list = boardMapper.boardselect();
+		Map<String, Object> map = new HashMap<>();
 		
-		return list;
+		int cnt = boardMapper.boardCnt();
+		
+		Pagination pagination = new Pagination(cnt, searchDTO);
+		
+		searchDTO.setPagination(pagination);
+		
+		List<BoardDTO> list = boardMapper.boardselect(searchDTO);
+		
+		map.put("pagination", pagination);
+		map.put("boardList", list);
+		
+		return map;
 	}
+	
+	//게시물 하나
+	public BoardDTO boardOne(int boardNum) {
+		
+		System.out.println(boardNum);
+		
+		boardMapper.readCnt(boardNum);
+		
+		BoardDTO boardDTO = boardMapper.boardOne(boardNum);
+		
+		return boardDTO;
+	}
+	
 
 }

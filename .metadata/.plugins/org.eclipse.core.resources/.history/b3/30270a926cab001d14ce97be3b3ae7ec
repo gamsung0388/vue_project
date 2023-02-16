@@ -1,0 +1,8 @@
+package com.example.demo.paging;
+
+import lombok.Data;
+
+@Data
+public class PageDTO {
+
+}

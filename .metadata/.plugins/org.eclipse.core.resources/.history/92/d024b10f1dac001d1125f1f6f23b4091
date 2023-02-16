@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.comment.CommentMapper">
+	<insert id="commentInsert" parameterType="commentDTO">
+		<selectKey resultType="int" keyProperty="commentNum" order="BEFORE">
+			SELECT IFNULL(MAX(COMMENT_NUM+1),1) FROM COMMENT;
+		</selectKey>
+		INSERT COMMENT(
+			COMMENT_NUM
+		    ,BOARD_NUM
+		    ,COMMENT_TXT
+		    ,USER_ID
+		    ) 
+		    VALUES(
+		    	#{commentNum}
+				#{boardNum},
+		        #{COMMENT_TXT},
+		        #{USER_ID}
+		    );
+	</insert>
+
+
+</mapper>
+

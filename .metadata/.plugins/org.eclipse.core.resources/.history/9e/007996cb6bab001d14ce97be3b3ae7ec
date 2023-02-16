@@ -1,0 +1,8 @@
+package com.example.demo.paging;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public class PageMapper {
+	public 
+}

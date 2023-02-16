@@ -1,0 +1,11 @@
+package com.example.demo.paging;
+
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+@Service
+public class PageService {
+	
+}

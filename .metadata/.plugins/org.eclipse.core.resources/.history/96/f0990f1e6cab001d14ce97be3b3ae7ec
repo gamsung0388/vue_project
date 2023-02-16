@@ -1,0 +1,8 @@
+package com.example.demo.paging;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class PageService {
+
+}

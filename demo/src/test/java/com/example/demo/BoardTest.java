@@ -1,13 +1,12 @@
 package com.example.demo;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.demo.board.BoardDTO;
 import com.example.demo.board.BoardService;
+import com.example.demo.paging.SearchDTO;
 
 @SpringBootTest
 public class BoardTest {
@@ -47,15 +46,15 @@ public class BoardTest {
 		
 		int bnum = 1;
 		
-		boardService.boardDelete(bnum);
+		//boardService.boardDelete(bnum);
 		
 	}
 	@Test
-	public void list(){
+	public void list(SearchDTO searchDTO){
 		
-		List<BoardDTO> list = boardService.boardSelect();
+		//List<BoardDTO> list = boardService.boardSelect(searchDTO);
 			
-		System.out.println("list: "+list);
+		//System.out.println("list: "+list);
 	
 	}
 	

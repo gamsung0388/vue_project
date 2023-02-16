@@ -23,17 +23,23 @@
   	<update id="boardupdate" parameterType="BoardDTO">
   		UPDATE BOARD
 		SET	BOARD_TITLE = #{boardTitle}
-		AND BOARD_TXT = #{boardTxt}
-		AND BOARD_TAG = #{boardTag}
-		AND UDATE_USER_ID = #{userId}
-		AND BOARD_UDT= NOW()
+		 	,BOARD_TXT = #{boardTxt}
+			,BOARD_TAG = #{boardTag}
+			,UDATE_USER_ID = #{userId}
+			,BOARD_UDT = #{boardUdt}
 		WHERE BOARD_NUM= #{boardNum};
   	</update>
-  	<delete id="boarddelete" parameterType="int">
-  		DELETE FROM BOARD
-  		WHERE BOARD_NUM= #{boardNum};
-  	</delete>  	
-	<select id="boardselect" resultType="BoardDTO">
+  	<update id="boarddelete" parameterType="int">
+  		UPDATE BOARD
+  		SET DEL_YN = 'Y'
+  		WHERE BOARD_NUM = #{boardNum};
+  	</update>
+  	<update id="readCnt" parameterType="int">
+  		UPDATE BOARD
+  		SET BOARD_VIEWCNT = BOARD_VIEWCNT + 1
+  		WHERE BOARD_NUM = #{boardNum};
+  	</update>  	
+	<select id="boardselect" parameterType="SearchDTO" resultType="BoardDTO">
 		SELECT BOARD_NUM
 			,BOARD_TITLE
 		    ,BOARD_TXT
@@ -43,6 +49,37 @@
 		    ,UDATE_USER_ID
 		    ,BOARD_DATE
 		    ,BOARD_UDT
-		FROM BOARD;
+		FROM BOARD
+		WHERE 1=1
+		AND DEL_YN = 'N'
+		<!-- <if test="searchType.equals('title')">
+			AND BOARD_TITLE like CONCAT('%',#{keyword},'%')
+	    </if>
+		<if test="searchType.equals('username')">
+			AND USER_ID LIKE CONCAT('%',#{keyword},'%')
+		</if> -->	
+		ORDER BY BOARD_NUM DESC
+		LIMIT #{pagination.limitStart},#{recordSize};
+	</select>
+		
+	<select id="boardCnt" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM BOARD
+		WHERE 1=1
+		AND DEL_YN = 'N';
+	</select>
+	<select id="boardOne" parameterType="int" resultType="BoardDTO">
+		SELECT BOARD_NUM
+			,BOARD_TITLE
+		    ,BOARD_TXT
+		    ,BOARD_TAG
+		    ,BOARD_VIEWCNT
+		    ,USER_ID
+		    ,UDATE_USER_ID
+		    ,BOARD_DATE
+		    ,BOARD_UDT
+		FROM BOARD
+		WHERE BOARD_NUM= #{boardNum} ;
 	</select>
 </mapper>  

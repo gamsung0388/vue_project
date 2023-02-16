@@ -1,0 +1,68 @@
+package com.example.demo.board;
+
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+@Service
+public class BoardService {
+	
+	private BoardMapper boardMapper;
+	
+	//게시물 등록
+	public String boardInsert(BoardDTO boardDTO) {
+		
+		System.out.println("boardDTO: "+boardDTO);
+		
+		boardMapper.boardinsert(boardDTO);
+		
+		return "Y";
+	}
+	
+	//게시물 수정
+	public String boardUpdate(BoardDTO boardDTO) {
+		
+		boardMapper.boardupdate(boardDTO);
+		
+		return "Y";
+	}
+	
+	//게시물 삭제
+	public String boardDelete(List<String> checkList) {
+				
+		for(int i=0;i<checkList.size();i++) {
+			
+			String sdata =checkList.get(i);
+			
+			sdata.replace("[","");
+			sdata.replace("]","");
+			
+			
+			
+			System.out.println(sdata);
+			
+			//int checkdata = Integer.parseInt(data); 
+			
+			
+			
+			//boardMapper.boarddelete(checkdata);
+			
+		}
+		
+		return "Y";
+	}	
+
+	//게시물 목록
+	public List<BoardDTO> boardSelect() {
+		
+		List<BoardDTO> list = boardMapper.boardselect();
+		
+		return list;
+	}
+
+}

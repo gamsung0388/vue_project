@@ -1,0 +1,14 @@
+package com.example.demo.comment;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class CommentService {
+	
+	private CommentMapper commentMapper;
+	
+	public String commentInsert() {
+	
+		return "Y";
+	}
+}
