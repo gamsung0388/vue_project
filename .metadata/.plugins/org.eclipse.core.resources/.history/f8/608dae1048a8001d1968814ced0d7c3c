@@ -1,9 +1,0 @@
-package com.example.demo.controller.rest;
-
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter
-public class ApiResult {
-
-}

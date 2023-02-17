@@ -11,5 +11,5 @@ public interface FileMapper {
 	public FileDTO getFileInfo(String fileId);
 	public int deleteFile(String fileId);
 	public void insertBoardFile(Map<String, Object> map);
-	public List<String> selectBoardFile(int bnum);
+	public List<BoardFileTotal> selectBoardFile(int bnum);
 }

@@ -1,7 +1,12 @@
 package com.example.demo.file;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +14,19 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.board.BoardDTO;
@@ -112,10 +125,10 @@ public class FileService {
 	}
 	
 	//
-	public FileDTO selectFile(String fileId) throws Exception{
+	public FileDTO selectFile(String fileId) {
 		
 		FileDTO fileDTO = fileMapper.getFileInfo(fileId);
-		
+				
 		return fileDTO;
 	}
 	
@@ -164,8 +177,81 @@ public class FileService {
 	}
 	
 	//게시판 파일 select
-	public List<String> selectBoardFile(int bnum){
-		List<String> list = fileMapper.selectBoardFile(bnum);		
+	public List<BoardFileTotal> selectBoardFile(int bnum){
+		List<BoardFileTotal> list = fileMapper.selectBoardFile(bnum);		
+		System.out.println("list: "+list);
 		return list;
+	}
+	
+	public ResponseEntity<Resource> filedown(HttpServletResponse res,String fileId){
+		
+//		//파일 조회
+//		FileDTO fileDto = fileService.selectFile(fileId);
+//		
+//		//파일 경로
+//		Path saveFilePath = Paths.get(fileDto.getLogiPath() + fileDto.getLogiNm());
+//			
+//		System.out.println("saveFilePath: "+saveFilePath);
+//		
+//		//해당경로에 파일이 없으면
+//		if(!saveFilePath.toFile().exists()) {
+//			throw new RuntimeException("file not found");
+//		}
+//			
+//		res.setHeader("Content-Disposition", "attachment; filename=\""+ URLEncoder.encode((String)fileDto.getOrigNm(),"UTF-8")+"\";");
+//		res.setHeader("Content-Transfer-Encoding", "binary");
+//		res.setHeader("Content-Type", "application/download; utf-8");			
+//		res.setHeader("Pragma", "no-cahe;");
+//		res.setHeader("Expires", "-1");
+//		FileInputStream fis = null;
+//			
+//		try {
+//			fis= new FileInputStream(saveFilePath.toFile());
+//			
+//			FileCopyUtils.copy(fis,res.getOutputStream());
+//			res.getOutputStream().flush();
+//			
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		} finally {
+//			try {
+//				fis.close();
+//			}
+//			catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		
+		FileDTO fileDto = selectFile(fileId);
+		
+		Path saveFilePath = Paths.get(fileDto.getLogiPath() + fileDto.getLogiNm());
+		
+		System.out.println(saveFilePath);
+		
+		//해당경로에 파일이 없으면
+		if(!saveFilePath.toFile().exists()) {
+			throw new RuntimeException("file not found");
+		}
+		
+		InputStreamResource resource = null;
+		try {
+			
+			resource = new InputStreamResource(new FileInputStream(saveFilePath.toString()));
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String fileName = "files";
+		
+		return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.cacheControl(CacheControl.noCache())
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName)
+				.body(resource);
+		
 	}
 }

@@ -87,12 +87,14 @@ public class BoardService {
 		
 		System.out.println(boardNum);
 		
-		boardMapper.readCnt(boardNum);
-		
 		BoardDTO boardDTO = boardMapper.boardOne(boardNum);
 		
 		return boardDTO;
 	}
-	
+	//조회수
+	public void readcnt(int boardNum) {
+		
+		boardMapper.readCnt(boardNum);
+	}
 
 }

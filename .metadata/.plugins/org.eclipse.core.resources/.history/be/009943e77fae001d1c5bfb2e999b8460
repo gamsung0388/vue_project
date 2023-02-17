@@ -1,0 +1,10 @@
+package com.example.demo.file;
+
+import lombok.Data;
+
+@Data
+public class BoardFileTotal {
+	private int boardFileIdx;
+	private int boardNum;
+	private String fileId;
+}

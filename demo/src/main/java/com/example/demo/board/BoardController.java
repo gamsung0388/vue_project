@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.file.BoardFileTotal;
 import com.example.demo.file.FileService;
 import com.example.demo.paging.SearchDTO;
 
@@ -103,14 +104,30 @@ public class BoardController {
 		
 	}
 	
+	@GetMapping("/board/updateForm")
+	public Map<String, Object> updateForm(@RequestParam("boardNum") String boardNum){
+		
+		Map<String, Object> map = new HashMap<>();
+				
+		BoardDTO boardDTO = boardService.boardOne(Integer.parseInt(boardNum));
+		List<BoardFileTotal> list = fileService.selectBoardFile(Integer.parseInt(boardNum));
+		
+		map.put("boardDTO", boardDTO);
+		map.put("fileList", list);
+		
+		return map;
+		
+	}
 	//단일
 	@GetMapping("/board/one")
 	public Map<String, Object> boardList(@RequestParam("boardNum") String boardNum){
 		
 		Map<String, Object> map = new HashMap<>();
 		
+		boardService.readcnt(Integer.parseInt(boardNum));
+		
 		BoardDTO boardDTO = boardService.boardOne(Integer.parseInt(boardNum));
-		List<String> list = fileService.selectBoardFile(Integer.parseInt(boardNum));
+		List<BoardFileTotal> list = fileService.selectBoardFile(Integer.parseInt(boardNum));
 		
 		map.put("boardDTO", boardDTO);
 		map.put("fileList", list);
