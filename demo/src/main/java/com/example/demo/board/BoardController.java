@@ -1,6 +1,7 @@
 package com.example.demo.board;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,10 @@ public class BoardController {
 		Map<String, Object> map = new HashMap<>();
 		
 		System.out.println("boardDTO: "+boardDTO);
+		
+		String delFile = boardDTO.getDelete_files().toString();
+	
+		fileService.deleteBoardFile(delFile);
 		
 		String board = boardService.boardUpdate(boardDTO);
 		
