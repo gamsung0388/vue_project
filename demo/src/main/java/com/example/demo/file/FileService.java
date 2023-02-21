@@ -1,5 +1,7 @@
 package com.example.demo.file;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +36,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.board.BoardDTO;
+import net.coobird.thumbnailator.Thumbnailator;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,19 +91,44 @@ public class FileService {
 					result.put("fileSize", file.getSize());
 					
 					System.out.println("result: "+result);
-					
-					//파일 insert
-					insertFile(result);
-					
-					System.out.println("fileId = "+result.get("fileId"));
-					
-					//배열에 담기
-					fileIds.add(String.valueOf(result.get("fileId")));
-					
+										
+//					System.out.println("saveFile: "+saveFile);
 					try {
+						
+						//파일 insert
+						insertFile(result);
+						
 						InputStream fileStream = file.getInputStream();
 						FileUtils.copyInputStreamToFile(fileStream, targetFile); //파일 저장
-												
+											
+//						System.out.println("file:                "+file);
+//						System.out.println("saveFile:                 "+targetFile);
+						
+						/* 썸네일 생성 (imageIO) */
+						
+						File thumbnailFiles = new File(_filePath, "s_" + saveFileName);
+						
+//						System.out.println(thumbnailFiles);
+						
+						BufferedImage bo_image = ImageIO.read(fileStream);
+						
+//						System.out.println(bo_image);
+						
+						BufferedImage bt_image = new BufferedImage(300, 500, BufferedImage.TYPE_3BYTE_BGR);
+						
+//						System.out.println(bt_image);
+						
+						Graphics2D graphic = bt_image.createGraphics();
+						
+						graphic.drawImage(bo_image, 0, 0,300,500, null);
+						
+						ImageIO.write(bt_image, "jpg" , thumbnailFiles);
+						
+						System.out.println("fileId = "+result.get("fileId"));
+						
+						//배열에 담기
+						fileIds.add(String.valueOf(result.get("fileId")));
+								
 					}catch(Exception e){
 						FileUtils.deleteQuietly(targetFile);	//저장된 현재파일 삭제
 						e.printStackTrace();

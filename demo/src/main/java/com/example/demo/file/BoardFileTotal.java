@@ -9,6 +9,7 @@ public class BoardFileTotal {
 	private String fileId;
 	private String useYn;
 	private String origNm;
+	private String logiFull;
 	private String name;
 	private String logiPath;
 	private String ext;
