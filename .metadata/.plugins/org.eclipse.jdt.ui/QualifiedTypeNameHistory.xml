@@ -17,7 +17,6 @@
     <fullyQualifiedTypeName name="javax.servlet.http.HttpServletRequest"/>
     <fullyQualifiedTypeName name="org.springframework.web.multipart.MultipartFile"/>
     <fullyQualifiedTypeName name="java.util.UUID"/>
-    <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="java.io.InputStream"/>
     <fullyQualifiedTypeName name="org.apache.tomcat.util.http.fileupload.FileUtils"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
@@ -43,11 +42,8 @@
     <fullyQualifiedTypeName name="org.springframework.http.MediaType"/>
     <fullyQualifiedTypeName name="org.springframework.http.CacheControl"/>
     <fullyQualifiedTypeName name="javax.servlet.http.HttpServletResponse"/>
-    <fullyQualifiedTypeName name="java.net.http.HttpHeaders"/>
-    <fullyQualifiedTypeName name="org.springframework.http.HttpHeaders"/>
     <fullyQualifiedTypeName name="javax.annotation.Resource"/>
     <fullyQualifiedTypeName name="org.springframework.core.io.Resource"/>
-    <fullyQualifiedTypeName name="org.springframework.core.io.InputStreamResource"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="lombok.Data"/>
     <fullyQualifiedTypeName name="com.example.demo.file.BoardFileTotal"/>
@@ -60,4 +56,8 @@
     <fullyQualifiedTypeName name="java.lang.Exception"/>
     <fullyQualifiedTypeName name="org.apache.ibatis.javassist.expr.NewArray"/>
     <fullyQualifiedTypeName name="javax.servlet.ServletOutputStream"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="org.springframework.core.io.InputStreamResource"/>
+    <fullyQualifiedTypeName name="java.net.http.HttpHeaders"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpHeaders"/>
 </qualifiedTypeNameHistroy>

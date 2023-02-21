@@ -1,9 +1,0 @@
-package com.example.demo.paging;
-
-import org.apache.ibatis.annotations.Mapper;
-
-@Mapper
-public interface PageMapper {
-	public int boardCnt();
-	public
-}
