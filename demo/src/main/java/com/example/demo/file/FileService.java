@@ -2,15 +2,19 @@ package com.example.demo.file;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -66,9 +71,9 @@ public class FileService {
 		String _filePath = String.valueOf(request.getParameter("filePath")).equals("null")? UPLOAD_FILE_PATH : UPLOAD_FILE_PATH+String.valueOf(request.getParameter("filePath")+"/");
 		//String _filePath = String.valueOf(request.getParam eter("filePath")).equals("null")? env.getProperty(UPLOAD_FILE_PATH): env.getProperty(UPLOAD_FILE_PATH)+String.valueOf(request.getParameter("filePath")+"/");
 		
-		System.out.println("_filePath= "+_filePath);
+		System.out.println("_filePath= "+_filePath);	// C:/dev/files/vue/boardfile/
 		
-		System.out.println("_filePath= "+ UPLOAD_FILE_PATH);
+		System.out.println("_filePath= "+ UPLOAD_FILE_PATH);	// C:/dev/files
 		
 		try {
 			if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")) {
@@ -87,52 +92,37 @@ public class FileService {
 					result.put("pyscNm", saveFileName);
 					result.put("origNm", originalFileName);
 					result.put("fileExt", extension);
+					result.put("thumbnailNm",  "s_" + saveFileName);
 					result.put("contentType", file.getContentType());
 					result.put("fileSize", file.getSize());
 					
-					System.out.println("result: "+result);
+					System.out.println("result: "+result); //result: {result=FAIL, origNm=cat--5-64-85909.png, pyscPath=C:/dev/files/vue/boardfile/, pyscNm=91bb372f-8c30-4d13-a3a5-da208ede5b13.png, fileSize=1198, fileExt=.png, contentType=image/png}
 										
-//					System.out.println("saveFile: "+saveFile);
 					try {
 						
 						//파일 insert
 						insertFile(result);
 						
 						InputStream fileStream = file.getInputStream();
-						FileUtils.copyInputStreamToFile(fileStream, targetFile); //파일 저장
-											
-//						System.out.println("file:                "+file);
-//						System.out.println("saveFile:                 "+targetFile);
-						
-						/* 썸네일 생성 (imageIO) */
-						
-						File thumbnailFiles = new File(_filePath, "s_" + saveFileName);
-						
-//						System.out.println(thumbnailFiles);
-						
-						BufferedImage bo_image = ImageIO.read(fileStream);
-						
-//						System.out.println(bo_image);
-						
-						BufferedImage bt_image = new BufferedImage(300, 500, BufferedImage.TYPE_3BYTE_BGR);
-						
-//						System.out.println(bt_image);
-						
-						Graphics2D graphic = bt_image.createGraphics();
-						
-						graphic.drawImage(bo_image, 0, 0,300,500, null);
-						
-						ImageIO.write(bt_image, "jpg" , thumbnailFiles);
-						
-						System.out.println("fileId = "+result.get("fileId"));
-						
+						byte[] fileBytes = IOUtils.toByteArray(fileStream); // read input stream into a byte array
+		                FileUtils.copyInputStreamToFile(new ByteArrayInputStream(fileBytes), targetFile); //파일 저장
+
 						//배열에 담기
 						fileIds.add(String.valueOf(result.get("fileId")));
-								
+						
+						System.out.println("saveFileName:                "+saveFileName);
+						System.out.println("fileBytes:                 "+fileBytes);
+						
+						//썸네일 작업
+						createThumbnail(_filePath, saveFileName, fileBytes);						
+						
+																		
 					}catch(Exception e){
+						
 						FileUtils.deleteQuietly(targetFile);	//저장된 현재파일 삭제
 						e.printStackTrace();
 						result.put("result", "FAIL");
+						
 					}
 				}
 				
@@ -148,6 +138,29 @@ public class FileService {
 		}
 		
 		return result;
+	}
+	
+	public void createThumbnail(String filePath, String fileName, byte[] fileBytes) throws IOException{
+		
+		File thumbnailFiles = new File(filePath, "s_" + fileName);
+		
+		System.out.println("---------------------------------------");
+		System.out.println("내부 thumbnailFiles: " + thumbnailFiles); // C:\dev\files\vue\boardfile\s_91bb372f-8c30-4d13-a3a5-da208ede5b13.png
+		System.out.println("btytes :" + fileBytes);//[B@4e024a4c
+		System.out.println("fileBytes : " +Arrays.toString(fileBytes));
+		System.out.println("------------------------------------- ");
+				
+		InputStream in = new ByteArrayInputStream(fileBytes);
+		
+	    BufferedImage bo_image = ImageIO.read(in);
+	    
+	    BufferedImage bt_image = new BufferedImage(300, 300, BufferedImage.TYPE_3BYTE_BGR);
+	    Graphics2D graphic = bt_image.createGraphics();
+	    graphic.drawImage(bo_image, 0, 0,300,500, null);
+	    graphic.dispose();
+	    
+	    ImageIO.write(bt_image, "png" , thumbnailFiles);
+		
 	}
 	
 	//파일저장 db

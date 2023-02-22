@@ -10,6 +10,7 @@ public class FileDTO {
 	private String origNm;
 	private String logiNm;
 	private String logiPath;
+	private String thumbnailNm;
 	private String ext;
 	private int size;
 	private LocalDateTime regDt;
