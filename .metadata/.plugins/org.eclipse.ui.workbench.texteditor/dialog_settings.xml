@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="insertBoardFile"/>
+		<item key="selection" value="selectFile"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="selectFile"/>
+			<item value="result"/>
 			<item value="thumbnailFiles"/>
 			<item value="file"/>
 			<item value="selectBoardFile"/>
 			<item value="getLogiNm"/>
 			<item value="origNm"/>
 			<item value="pyscNm"/>
-			<item value="LogiNm"/>
-			<item value="boardDTO"/>
 		</list>
 		<list key="replacehistory">
 		</list>

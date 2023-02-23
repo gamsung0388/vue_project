@@ -1,14 +1,11 @@
 package com.example.demo.file;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
+import com.example.demo.resources.MediaUtils;
+
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
+
 public class FileController {
 
 	FileService fileService;
@@ -81,26 +82,64 @@ public class FileController {
 		
 	}
 	@GetMapping("/imageview/{fileIds}")
-	public ResponseEntity<List<byte[]>> imageview(@PathVariable("fileIds") List<String> fileIds) throws IOException {
-//	public void imageview(@PathVariable("fileIds") List<String> fileids) throws IOException {
+	public ResponseEntity<byte[]> displayFile(@PathVariable("fileIds") String fileIds) throws Exception{
 		
-		 List<byte[]> images = new ArrayList<>();
+		FileDTO filedto =  fileService.selectFile(fileIds);
 		
-		for(String fileId : fileIds) {			
+		
+		InputStream in = null;
+		ResponseEntity<byte[]> entity = null;
+		try {
+		
+			String formatName = fileIds.substring(fileIds.lastIndexOf(".")+1);
+			MediaType mType = MediaUtils.getMediaType(formatName);
+			HttpHeaders headers = new HttpHeaders();
+			in = new FileInputStream(filedto.getLogiPath() + filedto.getThumbnailNm());
 			
-			FileDTO fileDTO = fileService.selectFile(fileId);
+			if(mType != null) {
+				headers.setContentType(mType);
+			}else {
+				fileIds = fileIds.substring(fileIds.indexOf("_")+1);
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+				headers.add("Content-Disposition", "attachment; filename=\""+ new String(fileIds.getBytes("UTF-8"),"ISO-8859-1"));
+			}
 			
-//			System.out.println("fileDTO: "+fileDTO);
-			
-			InputStream imageStream = new FileInputStream(fileDTO.getLogiPath() + fileDTO.getThumbnailNm());
-			
-			byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-			imageStream.close();	
-			
-			images.add(imageByteArray);
-			
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>(images, HttpStatus.OK);
+		return entity;
+		
+		
 	}
+	
+	
+//	@GetMapping("/imageview/{fileIds}")
+//	public ResponseEntity<List<byte[]>> imageview(@PathVariable("fileIds") List<String> fileIds) throws IOException {
+//	//public void imageview(@PathVariable("fileIds") List<String> fileids) throws IOException {
+//		
+//		
+//		
+//		 List<byte[]> images = new ArrayList<>();
+//		
+//		for(String fileId : fileIds) {			
+//			
+//			FileDTO fileDTO = fileService.selectFile(fileId);
+//			
+//			System.out.println("fileDTO: "+fileDTO);
+//			
+//			InputStream imageStream = new FileInputStream(fileDTO.getLogiPath() + fileDTO.getThumbnailNm());
+//			
+//			byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+//			imageStream.close();	
+//			
+//			images.add(imageByteArray);
+//			
+//		}
+//		
+//		return new ResponseEntity<>(images, HttpStatus.OK);
+//	}
 }
