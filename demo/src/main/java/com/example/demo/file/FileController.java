@@ -1,6 +1,8 @@
 package com.example.demo.file;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,10 +32,11 @@ import org.springframework.web.util.UriUtils;
 import com.example.demo.resources.MediaUtils;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @AllArgsConstructor
-
+@Slf4j
 public class FileController {
 
 	FileService fileService;
@@ -81,65 +84,24 @@ public class FileController {
         return ResponseEntity.ok().headers(headers).body(resource);
 		
 	}
-	@GetMapping("/imageview/{fileIds}")
-	public ResponseEntity<byte[]> displayFile(@PathVariable("fileIds") String fileIds) throws Exception{
 		
-		FileDTO filedto =  fileService.selectFile(fileIds);
+	@GetMapping("/getImage/{fileId}")
+	public ResponseEntity<byte[]> displayFiles(@PathVariable String fileId) throws FileNotFoundException {
 		
+		FileDTO fileDTO = fileService.selectFile(fileId);
+		InputStream imageStream = new FileInputStream(fileDTO.getLogiPath() + fileDTO.getThumbnailNm());
+		byte[] imageByteArray = null;
 		
-		InputStream in = null;
-		ResponseEntity<byte[]> entity = null;
 		try {
-		
-			String formatName = fileIds.substring(fileIds.lastIndexOf(".")+1);
-			MediaType mType = MediaUtils.getMediaType(formatName);
-			HttpHeaders headers = new HttpHeaders();
-			in = new FileInputStream(filedto.getLogiPath() + filedto.getThumbnailNm());
-			
-			if(mType != null) {
-				headers.setContentType(mType);
-			}else {
-				fileIds = fileIds.substring(fileIds.indexOf("_")+1);
-				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-				headers.add("Content-Disposition", "attachment; filename=\""+ new String(fileIds.getBytes("UTF-8"),"ISO-8859-1"));
-			}
-			
-			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);
-						
-		} catch (Exception e) {
+			imageByteArray = IOUtils.toByteArray(imageStream);
+			imageStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 		}
 		
-		return entity;
-		
+		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
 		
 	}
-	
-	
-//	@GetMapping("/imageview/{fileIds}")
-//	public ResponseEntity<List<byte[]>> imageview(@PathVariable("fileIds") List<String> fileIds) throws IOException {
-//	//public void imageview(@PathVariable("fileIds") List<String> fileids) throws IOException {
-//		
-//		
-//		
-//		 List<byte[]> images = new ArrayList<>();
-//		
-//		for(String fileId : fileIds) {			
-//			
-//			FileDTO fileDTO = fileService.selectFile(fileId);
-//			
-//			System.out.println("fileDTO: "+fileDTO);
-//			
-//			InputStream imageStream = new FileInputStream(fileDTO.getLogiPath() + fileDTO.getThumbnailNm());
-//			
-//			byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-//			imageStream.close();	
-//			
-//			images.add(imageByteArray);
-//			
-//		}
-//		
-//		return new ResponseEntity<>(images, HttpStatus.OK);
-//	}
+		
 }

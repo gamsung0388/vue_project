@@ -3,13 +3,12 @@ package com.example.demo.file;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,27 +20,20 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.board.BoardDTO;
-import net.coobird.thumbnailator.Thumbnailator;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +48,8 @@ public class FileService {
 	
 	@Autowired
 	FileMapper fileMapper;
+	
+	 Path fileStorageLocation;
 
 	private final String UPLOAD_FILE_PATH = "C:/dev/files";
 	
@@ -276,5 +270,27 @@ public class FileService {
 				}
 		}		
 	
-	}	
+	}
+	
+	public Resource loadFileAsResource(String fileId) throws FileNotFoundException {
+	    try {
+	    	FileDTO fileDto = selectFile(fileId);
+	    	
+	        Path filePath = this.fileStorageLocation.resolve(fileDto.getLogiPath()).normalize();
+	        Resource resource = new UrlResource(filePath.toUri());
+	        if (resource.exists()) {
+	        	
+	        	log.info("리소스 성공");
+	        	
+	            return resource;
+	        } else {
+	            throw new FileNotFoundException("File not found " + fileId);
+	        }
+	    } catch (MalformedURLException ex) {
+	        FileNotFoundException ex2 = new FileNotFoundException("File not found " + fileId);
+	        ex2.initCause(ex);
+	        throw ex2;
+	    }
+	}
+	
 }
