@@ -5,10 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,8 +25,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -271,26 +267,5 @@ public class FileService {
 		}		
 	
 	}
-	
-	public Resource loadFileAsResource(String fileId) throws FileNotFoundException {
-	    try {
-	    	FileDTO fileDto = selectFile(fileId);
-	    	
-	        Path filePath = this.fileStorageLocation.resolve(fileDto.getLogiPath()).normalize();
-	        Resource resource = new UrlResource(filePath.toUri());
-	        if (resource.exists()) {
-	        	
-	        	log.info("리소스 성공");
-	        	
-	            return resource;
-	        } else {
-	            throw new FileNotFoundException("File not found " + fileId);
-	        }
-	    } catch (MalformedURLException ex) {
-	        FileNotFoundException ex2 = new FileNotFoundException("File not found " + fileId);
-	        ex2.initCause(ex);
-	        throw ex2;
-	    }
-	}
-	
+		
 }

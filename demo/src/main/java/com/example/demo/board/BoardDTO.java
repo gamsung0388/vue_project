@@ -1,11 +1,16 @@
 package com.example.demo.board;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Setter
+@Getter
+@ToString
 public class BoardDTO {
 	private int boardNum;				//게시글 번호
 	private String boardTitle;			//게시글 제목
@@ -19,5 +24,22 @@ public class BoardDTO {
     private String board_file_cnt;		//파일리스트
 	private LocalDateTime boardDate; 	//게시글 작성일자 
 	private LocalDateTime boardUdt;		//게시글 수정일자
+	private String boardDateFormatted;
+	private String boardUdtFormatted;
+	
+	public void setBoardDate(LocalDateTime boardDate) {
+        this.boardDate = boardDate;
+        this.boardDateFormatted = getBoardDateFormatted(boardDate); // format date
+    }
+
+    public void setBoardUdt(LocalDateTime boardUdt) {
+        this.boardUdt = boardUdt;
+        this.boardUdtFormatted = getBoardDateFormatted(boardUdt); // format date
+    }
+
+    private String getBoardDateFormatted(LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm:ss");
+        return date.format(formatter);
+    }
 	
 }
