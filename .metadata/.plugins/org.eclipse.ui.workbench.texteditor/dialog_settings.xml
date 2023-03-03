@@ -8,14 +8,14 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="boarddto"/>
+			<item value="fileIdxs"/>
 			<item value="insertFile "/>
 			<item value="fileStorageLocation"/>
 			<item value="imageview"/>
 			<item value="mType"/>
 			<item value="selectFile"/>
 			<item value="result"/>
-			<item value="thumbnailFiles"/>
-			<item value="file"/>
 		</list>
 		<list key="replacehistory">
 		</list>

@@ -94,6 +94,20 @@ public class BoardController {
 		
 		return map;
 	}
+	//진짜 삭제
+	@GetMapping("/board/truedelete")
+	public Map<String,Object> boardtrueDelete(@RequestParam("checkList") List<String> checkList){
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		System.out.println("checkList"+checkList);
+		
+		String board = boardService.boardTrueDelete(checkList);		
+		
+		map.put("YN", board);
+		
+		return map;
+	} 
 	
 	//목록
 	@GetMapping("/board/list")

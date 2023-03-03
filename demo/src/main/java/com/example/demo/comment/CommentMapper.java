@@ -9,6 +9,8 @@ public interface CommentMapper {
 	public void commentInsert(CommentDTO commentDTO);
 	public void commentUpdate(CommentDTO commentDTO);
 	public void commentDelete(int commentNum);
+	public void commentTrueDelete(int commentNum);
+	public void boardCommentTrueDel(int boardNum);
 	public void boardCommentDel(int boardNum);
 	public List<CommentDTO> commentSelect(int boardNum);
 }

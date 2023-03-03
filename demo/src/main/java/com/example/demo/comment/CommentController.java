@@ -58,6 +58,18 @@ public class CommentController {
 		return map;		
 	}
 	
+	@GetMapping("/comment/truedelete")
+	public Map<String, Object> commentTrueDelete(@RequestParam("commentNum") int commentNum){
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		String deleteyn = commentService.commentTrueDelete(commentNum);		
+	
+		map.put("result", deleteyn);
+		
+		return map;		
+	}
+	
 	@GetMapping("/comment/select")
 	public Map<String, Object> commentSelect(@RequestParam("boardNum") int boardNum){
 		

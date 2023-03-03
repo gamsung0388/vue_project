@@ -11,6 +11,7 @@ public interface BoardMapper {
 	public void boardinsert(BoardDTO boardDTO);
 	public void boardupdate(BoardDTO boardDTO);
 	public void boarddelete(int boardNum);
+	public void boardtruedelete(int boardNum);
 	public void readCnt(int boardNum);
 	
 	public int boardCnt();

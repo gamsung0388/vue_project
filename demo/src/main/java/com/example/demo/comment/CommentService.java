@@ -34,6 +34,13 @@ public class CommentService {
 		return "Y";
 	}
 	
+	public String commentTrueDelete(int commentNum) {
+			
+		commentMapper.commentTrueDelete(commentNum);
+		
+		return "Y";
+	}
+	
 	public List<CommentDTO> commentSelect(int boardNum) {
 		
 		List<CommentDTO> list = commentMapper.commentSelect(boardNum);		

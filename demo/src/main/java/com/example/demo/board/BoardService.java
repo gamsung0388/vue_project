@@ -56,12 +56,37 @@ public class BoardService {
 			
 			System.out.println(checkdata);
 			
-			boardMapper.boarddelete(checkdata);
 			commentMapper.boardCommentDel(checkdata);
+			boardMapper.boarddelete(checkdata);
+			
 		}
 		
 		return "Y";
 	}	
+	
+	//게시물 진짜 삭제
+	public String boardTrueDelete(List<String> checkList) {
+		
+		for(int i=0;i<checkList.size();i++) {
+			
+			String sdata =checkList.get(i);
+			
+			sdata = sdata.replace("[","");
+			sdata = sdata.replace("]","");
+			
+			int checkdata = Integer.parseInt(sdata); 
+			
+			System.out.println(checkdata);
+			
+			commentMapper.boardCommentTrueDel(checkdata);
+			boardMapper.boardtruedelete(checkdata);
+			
+		}
+		
+		return "Y";
+	}
+	
+	
 
 	//게시물 목록
 	public Map<String, Object> boardSelect(SearchDTO searchDTO) {
