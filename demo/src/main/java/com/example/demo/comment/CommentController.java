@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.paging.SearchDTO;
+
 
 @RestController
 public class CommentController {
@@ -59,25 +61,25 @@ public class CommentController {
 	}
 	
 	@GetMapping("/comment/truedelete")
-	public Map<String, Object> commentTrueDelete(@RequestParam("commentNum") int commentNum){
+	public Map<String, Object> commentTrueDelete(@RequestParam("checkList") List<String> checkList){
 		
 		Map<String, Object> map = new HashMap<>();
 		
-		String deleteyn = commentService.commentTrueDelete(commentNum);		
+		String deleteyn = commentService.commentTrueDelete(checkList);		
 	
 		map.put("result", deleteyn);
 		
 		return map;		
 	}
 	
-	@GetMapping("/comment/select")
-	public Map<String, Object> commentSelect(@RequestParam("boardNum") int boardNum){
+	@GetMapping("/comment/selectOne")
+	public Map<String, Object> commentSelectOne(@RequestParam("boardNum") int boardNum){
 		
 		System.out.println("boardNum: "+boardNum);
 		
 		Map<String, Object> map = new HashMap<>();
 		
-		List<CommentDTO> commentList = commentService.commentSelect(boardNum);		
+		List<CommentDTO> commentList = commentService.commentSelectOne(boardNum);		
 	
 		System.out.println("commentList: "+commentList);
 		
@@ -86,4 +88,11 @@ public class CommentController {
 		return map;		
 	}
 	
+	@GetMapping("/comment/select")
+	public Map<String, Object> commentSelect(SearchDTO searchDTO){
+		
+		Map<String, Object> commentListMap = commentService.commentSelect(searchDTO);		
+	
+		return commentListMap;		
+	}
 }

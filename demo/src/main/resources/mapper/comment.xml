@@ -19,7 +19,7 @@
 		        #{userId}
 		    );
 	</insert>
-	<select id="commentSelect" parameterType="commentDTO" resultType="commentDTO">
+	<select id="commentSelectOne" parameterType="commentDTO" resultType="commentDTO">
 		SELECT 
 			COMMENT_NUM
 		    ,BOARD_NUM
@@ -33,6 +33,27 @@
 		AND BOARD_NUM= #{boardNum}
 		AND DEL_YN='N';
 	</select>
+	<select id="commentCnt" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM COMMENT
+	</select>
+	<select id="commentSelect" resultType="commentDTO">
+		SELECT 
+			C.COMMENT_NUM
+		    ,B.BOARD_TITLE
+		    ,C.BOARD_NUM
+		    ,C.COMMENT_TXT
+		    ,C.USER_ID
+		    ,C.DEL_YN
+		    ,C.COMMENT_REG
+		    ,C.COMMENT_UDT
+		FROM COMMENT C
+		JOIN BOARD B ON B.BOARD_NUM = C.BOARD_NUM
+		WHERE 1=1
+		ORDER BY COMMENT_REG DESC
+		LIMIT #{pagination.limitStart},#{recordSize};
+	</select>
 	<update id="commentUpdate" parameterType="commentDTO">
 		UPDATE COMMENT
 		SET COMMENT_TXT = #{commentTxt}
@@ -43,7 +64,7 @@
 		SET DEL_YN = 'Y'    
 		WHERE COMMENT_NUM = #{commentNum};
 	</update>
-	<delete id="commenttrueDelete" parameterType="commentDTO">
+	<delete id="commentTrueDelete" parameterType="commentDTO">
 		DELETE FROM COMMENT
   		WHERE COMMENT_NUM = #{commentNum};
 	</delete>

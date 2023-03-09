@@ -86,8 +86,6 @@ public class BoardService {
 		return "Y";
 	}
 	
-	
-
 	//게시물 목록
 	public Map<String, Object> boardSelect(SearchDTO searchDTO) {
 		

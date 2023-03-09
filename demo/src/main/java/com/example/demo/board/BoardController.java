@@ -114,7 +114,8 @@ public class BoardController {
 	public Map<String, Object> boardList(@RequestParam("pageNum") int pageNum, SearchDTO searchDTO){
 		
 		searchDTO.setPage(pageNum);
-		searchDTO.setPageSize(5);
+//		searchDTO.setRecordSize(5);
+//		searchDTO.setPageSize(5);
 		
 		Map<String, Object> map = boardService.boardSelect(searchDTO);
 		
